@@ -29,7 +29,7 @@ services:
     depends_on:
       - mariadb-kinn # Pastikan MariaDB berjalan dulu, diganti dari mariadb-namapanggilan
     volumes:
-      - ./app:/var/www/html # Mount direktori 'app' Anda (berisi file PHP) ke DocumentRoot Apache
+      - ./app:/var/www/html:Z # Mount direktori 'app' Anda (berisi file PHP) ke DocumentRoot Apache
     ports:
       - "8001:80" # Akses layanan HTTP pada port 8001 di host
     environment:
