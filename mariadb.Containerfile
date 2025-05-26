@@ -1,7 +1,13 @@
-# Gunakan image mariadb resmi sebagai base
+# mariadb.Containerfile
+
+# Gunakan base image mariadb
+# Anda bisa memilih versi MariaDB yang spesifik, misal: mariadb:10.5
 FROM mariadb:latest
 
-# Salin file SQL untuk inisialisasi database dan tabel
-# Pastikan file init.sql berada di direktori yang sama dengan Containerfile ini,
-# atau sesuaikan path sumbernya.
-COPY init.sql /docker-entrypoint-initdb.d/
+# Salin file *.sql ke direktori inisialisasi database MariaDB
+# File SQL di direktori /docker-entrypoint-initdb.d/ akan dieksekusi secara otomatis
+# saat container pertama kali dijalankan dan database belum ada/kosong.
+# Pastikan path ke init.sql sesuai dengan struktur direktori Anda.
+# Jika init.sql ada di direktori yang sama dengan mariadb.Containerfile:
+COPY ./sql/init.sql /docker-entrypoint-initdb.d/init.sql
+
