@@ -1,0 +1,78 @@
+# compose.yml
+version: "3.8" # Versi compose file format
+
+services:
+  mariadb-Kinn: # Ganti Kinn dengan nama panggilan Anda
+    build:
+      context: . # Konteks build adalah direktori saat ini
+      dockerfile: mariadb.Containerfile # Menggunakan Containerfile yang telah kita buat
+    container_name: mariadb_service_kinn # Nama container yang lebih deskriptif
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_kinn # Ganti dengan password root yang kuat
+      MYSQL_DATABASE: habit_tracker_db # Nama database yang akan dibuat
+      MYSQL_USER: user_kinn # User baru untuk aplikasi
+      MYSQL_PASSWORD: pass_kinn # Password untuk user baru
+    volumes:
+      - mariadb_data_kinn:/var/lib/mysql # Volume untuk persistensi data MariaDB
+    ports:
+      - "3306:3306" # Mapping port host:container (bisa diubah port host jika 3306 sudah terpakai)
+    healthcheck: # Pengecekan kesehatan untuk memastikan MariaDB siap sebelum service lain dimulai
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "${MYSQL_USER:-user_kinn}",
+          "-p${MYSQL_PASSWORD:-pass_kinn}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s # Waktu tunggu awal sebelum healthcheck dimulai
+
+  php-apache-Kinn: # Ganti Kinn dengan nama panggilan Anda
+    build:
+      context: .
+      dockerfile: php-apache.Containerfile # Menggunakan Containerfile yang telah kita buat
+    container_name: php_apache_service_kinn
+    restart: unless-stopped
+    depends_on: # Memastikan mariadb-Kinn siap sebelum service ini dimulai
+      mariadb-Kinn:
+        condition: service_healthy # Menunggu sampai MariaDB healthy
+    volumes:
+      # Bind mount untuk file aplikasi PHP.
+      # Pastikan direktori ./app di host machine berisi file-file PHP Anda (index.php, db.php, dll.)
+      - ./app:/var/www/html
+    ports:
+      - "80:80" # Mapping port untuk layanan HTTP (bisa diubah port host jika 80 sudah terpakai)
+    environment:
+      # Variabel lingkungan untuk koneksi database di db.php
+      DB_HOST: mariadb-Kinn # Harus sama dengan nama service MariaDB
+      DB_NAME: habit_tracker_db # Harus sama dengan MYSQL_DATABASE di service MariaDB
+      DB_USER: user_kinn # Harus sama dengan MYSQL_USER di service MariaDB
+      DB_PASSWORD: pass_kinn # Harus sama dengan MYSQL_PASSWORD di service MariaDB
+      DB_PORT: 3306
+
+  phpmyadmin-Kinn: # Ganti Kinn dengan nama panggilan Anda
+    image: phpmyadmin/phpmyadmin:latest # Menggunakan base image phpmyadmin
+    container_name: phpmyadmin_service_kinn
+    restart: unless-stopped
+    depends_on:
+      - mariadb-Kinn # Tergantung pada service MariaDB
+    ports:
+      - "81:80" # Mapping port untuk PhpMyAdmin (host:container)
+    environment:
+      PMA_HOST: mariadb-Kinn # Menunjuk ke service MariaDB kita
+      PMA_PORT: 3306
+      # PMA_USER: root (opsional, bisa login dengan root atau user_kinn)
+      # PMA_PASSWORD: root_password_kinn (opsional)
+      MYSQL_ROOT_PASSWORD: root_password_kinn # Diperlukan agar phpMyAdmin bisa login sebagai root jika diperlukan
+      UPLOAD_LIMIT: 1G # Batas upload, bisa disesuaikan
+
+volumes: # Mendefinisikan named volume untuk persistensi data
+  mariadb_data_kinn:
+    driver: local # Menggunakan driver volume lokal
