@@ -46,7 +46,7 @@ services:
     volumes:
       # Bind mount untuk file aplikasi PHP.
       # Pastikan direktori ./app di host machine berisi file-file PHP Anda (index.php, db.php, dll.)
-      - ./app:/var/www/html
+      - ./app:/var/www/html:Z
     ports:
       - "8000:80" # Mapping port untuk layanan HTTP (bisa diubah port host jika 80 sudah terpakai)
     environment:
