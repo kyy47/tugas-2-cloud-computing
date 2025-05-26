@@ -3,10 +3,10 @@
 
 // Konfigurasi database akan diambil dari environment variables
 // yang akan diset di file compose.yml untuk service php-apache.
-$host = getenv('DB_HOST') ?: 'mariadb-kinn'; // Nama service MariaDB
-$dbname = getenv('DB_NAME') ?: 'habit_tracker_db';
-$username = getenv('DB_USER') ?: 'user_kinn';
-$password = getenv('DB_PASSWORD') ?: 'pass_kinn';
+$host = getenv('DB_HOST') ?: 'sql200.infinityfree.com-kinn'; // Nama service MariaDB
+$dbname = getenv('DB_NAME') ?: 'if0_39081664_habit_tracker_db';
+$username = getenv('DB_USER') ?: 'if0_39081664';
+$password = getenv('DB_PASSWORD') ?: 'sNOXI1tEf8hbo9O';
 $port = getenv('DB_PORT') ?: '3306'; // Port default MariaDB
 
 // Membuat koneksi menggunakan mysqli

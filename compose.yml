@@ -41,7 +41,7 @@ services:
     container_name: php_apache_service_kinn
     restart: unless-stopped
     depends_on: # Memastikan mariadb-Kinn siap sebelum service ini dimulai
-      mariadb-Kinn:
+      mariadb-kinn:
         condition: service_healthy # Menunggu sampai MariaDB healthy
     volumes:
       # Bind mount untuk file aplikasi PHP.
@@ -51,7 +51,7 @@ services:
       - "80:80" # Mapping port untuk layanan HTTP (bisa diubah port host jika 80 sudah terpakai)
     environment:
       # Variabel lingkungan untuk koneksi database di db.php
-      DB_HOST: mariadb-Kinn # Harus sama dengan nama service MariaDB
+      DB_HOST: mariadb-kinn # Harus sama dengan nama service MariaDB
       DB_NAME: habit_tracker_db # Harus sama dengan MYSQL_DATABASE di service MariaDB
       DB_USER: user_kinn # Harus sama dengan MYSQL_USER di service MariaDB
       DB_PASSWORD: pass_kinn # Harus sama dengan MYSQL_PASSWORD di service MariaDB
@@ -66,7 +66,7 @@ services:
     ports:
       - "81:80" # Mapping port untuk PhpMyAdmin (host:container)
     environment:
-      PMA_HOST: mariadb-Kinn # Menunjuk ke service MariaDB kita
+      PMA_HOST: mariadb-kinn # Menunjuk ke service MariaDB kita
       PMA_PORT: 3306
       # PMA_USER: root (opsional, bisa login dengan root atau user_kinn)
       # PMA_PASSWORD: root_password_kinn (opsional)
