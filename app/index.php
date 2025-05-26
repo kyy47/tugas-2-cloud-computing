@@ -45,7 +45,7 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="container">
-        <h1>Daftar Kebiasaan Saya</h1>
+        <h1>Daftar Kebiasaan Saya - M. RIZKI</h1>
         <a href="create.php" class="btn btn-add">Tambah Kebiasaan Baru</a>
 
         <?php
