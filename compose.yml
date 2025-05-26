@@ -48,7 +48,7 @@ services:
       # Pastikan direktori ./app di host machine berisi file-file PHP Anda (index.php, db.php, dll.)
       - ./app:/var/www/html
     ports:
-      - "80:80" # Mapping port untuk layanan HTTP (bisa diubah port host jika 80 sudah terpakai)
+      - "8000:80" # Mapping port untuk layanan HTTP (bisa diubah port host jika 80 sudah terpakai)
     environment:
       # Variabel lingkungan untuk koneksi database di db.php
       DB_HOST: mariadb-kinn # Harus sama dengan nama service MariaDB
@@ -64,7 +64,7 @@ services:
     depends_on:
       - mariadb-kinn # Tergantung pada service MariaDB
     ports:
-      - "81:80" # Mapping port untuk PhpMyAdmin (host:container)
+      - "8001:80" # Mapping port untuk PhpMyAdmin (host:container)
     environment:
       PMA_HOST: mariadb-kinn # Menunjuk ke service MariaDB kita
       PMA_PORT: 3306
