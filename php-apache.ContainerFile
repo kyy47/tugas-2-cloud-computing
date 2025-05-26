@@ -1,31 +1,13 @@
-# php-apache.Containerfile
-
-# Gunakan base image php dengan apache
-# Anda bisa memilih versi PHP yang spesifik jika diperlukan, misal: php:8.0-apache
+# Gunakan image php-apache resmi sebagai base
 FROM php:apache
 
 # Install mysqli extension
-# RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
-#    && docker-php-ext-install mysqli \
-#    && docker-php-ext-enable mysqli
-# Cara yang lebih umum dan sering berhasil untuk PHP image resmi:
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
-# Install nano text editor
-# Pertama update package list, lalu install nano
-RUN apt-get update && apt-get install -y \
-    nano \
-    && rm -rf /var/lib/apt/lists/*
+# Install nano editor
+RUN apt-get update && apt-get install -y nano
 
-# (Opsional) Anda bisa menyalin file konfigurasi PHP kustom jika ada
-# COPY custom-php.ini /usr/local/etc/php/conf.d/custom-php.ini
-
-# (Opsional) Setel working directory jika diperlukan,
-# tapi untuk php:apache, DocumentRoot defaultnya adalah /var/www/html
-# WORKDIR /var/www/html
-
-# Port yang diekspos oleh Apache adalah 80 (default)
-EXPOSE 80
-
-# Perintah default sudah diatur oleh base image php:apache untuk menjalankan Apache.
-# CMD ["apache2-foreground"]
+# (Opsional) Anda bisa menambahkan perintah COPY di sini jika file PHP
+# ingin dimasukkan ke dalam image secara default,
+# namun untuk tugas ini, file PHP akan di-mount melalui volume.
+# COPY ./app/ /var/www/html/
