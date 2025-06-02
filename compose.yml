@@ -24,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: php-apache.Containerfile
+    image: docker.io/library/php:8.3-rc-apache
     container_name: php-apache-kinn-container
     depends_on:
       - mariadb-kinn
