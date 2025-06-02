@@ -43,7 +43,7 @@ services:
 
   # Service untuk PhpMyAdmin
   phpmyadmin-kinn:
-    image: phpmyadmin/phpmyadmin
+    image: docker.io/phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin-kinn-container
     depends_on:
       - mariadb-kinn
